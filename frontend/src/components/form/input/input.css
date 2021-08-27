@@ -1,0 +1,58 @@
+.custom-input-wrapper {
+	margin-bottom: 0.75rem;
+}
+.custom-input-wrapper .feedback {
+	margin: 0.2rem 0.75rem 0;
+	font-size: 0.75rem;
+}
+
+.custom-input {
+	background: transparent;
+	border: 2px solid var(--border);
+	border-radius: 0.5rem;
+	padding: 0.5rem 0.75rem;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.custom-input input {
+	background: transparent;
+	border: none;
+	outline: none;
+	color: var(--text-color);
+	padding: 0 0.25rem;
+	font-size: 1rem;
+}
+
+.custom-input .icon {
+	font-size: 1.2rem;
+	transform: translateX(-15%);
+}
+
+.custom-input:focus-within {
+	/* border-color: var(--secondary); */
+	/* color: rgb(194, 153, 255); */
+}
+
+.status.checking {
+	color: var(--pending);
+}
+
+.status.valid {
+	color: var(--success);
+}
+
+.status.invalid {
+	color: var(--failure);
+}
+
+.feedback {
+	opacity: 0;
+}
+
+.feedback.invalid {
+	opacity: 1;
+	color: var(--failure);
+	font-weight: bold;
+}

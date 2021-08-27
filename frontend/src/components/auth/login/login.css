@@ -1,0 +1,12 @@
+.login-container h1 {
+	font-family: 'Rampart One';
+	text-align: center;
+	margin: -3rem 0 2rem;
+	color: var(--secondary);
+}
+
+.login-container .actions {
+	margin-top: 2rem;
+	display: flex;
+	justify-content: space-between;
+}

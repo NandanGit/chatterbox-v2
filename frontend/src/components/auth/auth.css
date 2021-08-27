@@ -1,0 +1,37 @@
+.auth-wrapper {
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(0.25rem);
+}
+
+.app-title {
+	position: absolute;
+	top: 5%;
+	left: 50%;
+	transform: translateX(-50%);
+	font-family: 'Rampart One';
+	font-size: 3rem;
+	color: var(--secondary);
+}
+
+.auth-container {
+	width: 40%;
+	height: 60%;
+	/* background-color: var(--bg-color-75); */
+	border-radius: 2rem;
+
+	background: linear-gradient(225deg, var(--bg-color-75), var(--accent-25));
+}
+
+/* Media queries */
+@media only screen and (max-width: 960px) {
+	.auth-container {
+		width: 60%;
+	}
+}
+
+@media only screen and (max-width: 720px) {
+	.auth-container {
+		width: 80%;
+	}
+}
