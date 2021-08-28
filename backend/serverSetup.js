@@ -1,6 +1,5 @@
 const express = require('express');
 const morgan = require('morgan');
-
 const http = require('http');
 
 // Import Routes
@@ -28,3 +27,6 @@ module.exports = {
 	server,
 	app,
 };
+
+// SocketSetup
+require('./socketServer');
