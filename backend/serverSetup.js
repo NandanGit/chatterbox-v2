@@ -6,7 +6,7 @@ const http = require('http');
 // Import Routes
 const {
 	authRoutes,
-	dbSandboxRoutes, // Temporary routes
+	// dbSandboxRoutes, // Temporary routes
 } = require('./routes');
 
 // Express setup
