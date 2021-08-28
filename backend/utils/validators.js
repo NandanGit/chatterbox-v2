@@ -50,3 +50,29 @@ exports.userValidator = ({ username, password, displayName }) => {
 
 	return '';
 };
+
+groupNameValidator = (groupName) => {
+	if (!groupName) return 'groupName not provided';
+	groupName = groupName.trim();
+	if (!groupName) return 'groupName not provided';
+	if (groupName.length < 3) return 'groupName is too short';
+	if (groupName.length > 15) return 'groupName is too long';
+	if (!/^[a-z]+$/.test(groupName[0]))
+		return `groupName should only start with a lowercase alphabet`;
+	if (!/^[a-z0-9.]+$/.test(groupName)) return 'Invalid groupName';
+	return '';
+};
+
+exports.groupValidator = ({ groupName, displayName }) => {
+	let error;
+	error = groupNameValidator(groupName);
+	if (error) {
+		return error;
+	}
+
+	error = displayNameValidator(displayName);
+	if (error) {
+		return error;
+	}
+	return '';
+};

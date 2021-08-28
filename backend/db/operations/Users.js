@@ -77,7 +77,7 @@ exports.addFriendTo = async (username, friendUsername) => {
 		);
 		return {
 			status: 'success',
-			message: `${friendName} joined ${username}'s friendlist`,
+			message: `${friendUsername} joined ${username}'s friendlist`,
 		};
 	} catch (err) {
 		return { status: 'error', message: err.message };

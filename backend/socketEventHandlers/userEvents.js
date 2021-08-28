@@ -1,8 +1,17 @@
+const dbOps = require('../db/operations');
+
 module.exports = (io, socket) => {
-	const createUser = (payload) => {};
+	const searchUser = async (payload, callback) => {
+		const { keyword } = payload;
+		if (!keyword) {
+			return callback({
+				status: 'error',
+				message: 'Keyword not provided',
+			});
+		}
+		const { matchedUsers } = await dbOps.Users.search(keyword);
+		callback({ matchedUsers });
+	};
 
-	const searchUser = (payload) => {};
-
-	socket.on('user:create', createUser);
 	socket.on('user:search', searchUser);
 };
