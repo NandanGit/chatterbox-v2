@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 
 import './search.css';
-import { capitalize } from '../../../utils/strings';
 
 function Search() {
 	const [searchMode, setSearchMode] = useState('users');
