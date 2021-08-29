@@ -33,5 +33,19 @@ module.exports = (io, socket) => {
 
 		callback({ isSent: true });
 	};
+
+	const fetchMessages = async (payload, callback) => {
+		const { groupName } = payload;
+		const { displayName, messages } = await dbOps.GM.retrieve(groupName);
+		if (!messages) {
+			return callback({
+				status: 'error',
+				message: 'something went wrong',
+			});
+		}
+		callback({ status: 'success', groupName, displayName, messages });
+	};
+
 	socket.on('group:message', sendGroupMessage);
+	socket.on('group:fetch:conversation', fetchMessages);
 };

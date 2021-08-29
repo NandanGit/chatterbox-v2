@@ -31,5 +31,21 @@ module.exports = (io, socket) => {
 			.emit('direct:message', { from: socket.username, body });
 	};
 
+	const fetchMessages = async (payload, callback) => {
+		const { friendName } = payload;
+		const { messages } = await dbOps.DM.retrieve(
+			socket.username,
+			friendName
+		);
+		if (!messages) {
+			return callback({
+				status: 'error',
+				message: 'something went wrong',
+			});
+		}
+		callback({ status: 'success', messages });
+	};
+
 	socket.on('direct:message', sendDirectMessage);
+	socket.on('direct:fetch:conversation', fetchMessages);
 };
