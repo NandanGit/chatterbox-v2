@@ -25,12 +25,13 @@ module.exports = (io, socket) => {
 			socket.join(`group:${to}`);
 		}
 		await dbOps.GM.create({ from: socket.username, to, body });
-		callback({ isSent: true });
 
 		// io logic
 		socket
 			.to(`group:${to}`)
-			.emit('group:message', { from: socket.username, body });
+			.emit('group:message', { from: socket.username, body, to });
+
+		callback({ isSent: true });
 	};
 
 	const joinGroup = async (payload, callback) => {
