@@ -49,12 +49,62 @@ module.exports = (io, socket) => {
 		await dbOps.Groups.add(groupName, socket.username);
 		socket.groups = [...socket.groups, groupName];
 		socket.join(`group:${groupName}`);
+
+		await dbOps.GM.create({
+			from: 'admin',
+			to: groupName,
+			body: `${socket.username} joined the group`,
+		});
+
+		// io logic
+		socket.to(`group:${groupName}`).emit('group:message', {
+			from: 'admin',
+			body: `${socket.username} joined the group`,
+			to: groupName,
+		});
+
 		return callback({
 			isJoined: true,
 			message: 'Joined the Group',
 		});
 	};
 
+	const leaveGroup = async (payload, callback) => {
+		const { groupName } = payload;
+		const { status } = await dbOps.Users.removeUserFrom(
+			socket.username,
+			groupName
+		);
+		if (status !== 'success') {
+			return callback({
+				isLeft: false,
+				message: 'Group does not exist',
+			});
+		}
+		await dbOps.Groups.remove(groupName, socket.username);
+		socket.groups = socket.groups.filter((group) => group !== groupName);
+
+		await dbOps.GM.create({
+			from: 'admin',
+			to: groupName,
+			body: `${socket.username} left the group`,
+		});
+
+		// io logic
+		socket.to(`group:${groupName}`).emit('group:message', {
+			from: 'admin',
+			body: `${socket.username} left the group`,
+			to: groupName,
+		});
+		socket.leave(`group:${groupName}`);
+
+		return callback({
+			isLEft: true,
+			message: 'Left the Group',
+		});
+	};
+
 	socket.on('group:message', sendGroupMessage);
 	socket.on('group:join', joinGroup);
+	socket.on('group:leave', leaveGroup);
 };

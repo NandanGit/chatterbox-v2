@@ -14,14 +14,27 @@ module.exports = (io, socket) => {
 		if (error) {
 			callback({ isCreated: false, message: error });
 		}
-		await dbOps.Groups.create({
+		const { status } = await dbOps.Groups.create({
 			groupName,
 			displayName,
 		});
+		if (status !== 'success') {
+			return callback({
+				isCreated: false,
+				message: `A group with name ${groupName} already exists`,
+			});
+		}
 		await dbOps.Groups.add(groupName, socket.username);
 		await dbOps.Users.joinUserTo(socket.username, groupName);
 		socket.groups = [...socket.groups, groupName];
 		socket.join(`group:${groupName}`);
+
+		await dbOps.GM.create({
+			from: 'admin',
+			to: groupName,
+			body: `${socket.username} created ${groupName}`,
+		});
+
 		callback({ isCreated: true, message: 'Group Created' });
 	};
 

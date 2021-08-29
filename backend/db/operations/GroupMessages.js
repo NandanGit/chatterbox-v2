@@ -7,7 +7,7 @@ exports.create = async (message) => {
 			{ username: from },
 			{ username: 1 }
 		);
-		if (!fromUser) {
+		if (!fromUser && from != 'admin') {
 			return { status: 'error', message: `User ${from} not found` };
 		}
 		const toGroup = await Group.findOne(
@@ -18,7 +18,7 @@ exports.create = async (message) => {
 			return { status: 'error', message: `Group ${to} not found` };
 		}
 		const newMessage = new GroupMessage({
-			from: fromUser._id,
+			from: fromUser ? fromUser._id : from,
 			to: toGroup._id,
 			body,
 		});
