@@ -1,7 +1,7 @@
 const { GroupMessage, Group, User } = require('../models');
 
 exports.create = async (message) => {
-	const { from, to, body } = message;
+	const { from, to, body, isMilestone } = message;
 	try {
 		const fromUser = await User.findOne(
 			{ username: from },
@@ -21,6 +21,7 @@ exports.create = async (message) => {
 			from: fromUser ? fromUser._id : from,
 			to: toGroup._id,
 			body,
+			isMilestone,
 		});
 		const createdMessage = await newMessage.save();
 		return {
@@ -43,7 +44,7 @@ exports.retrieve = async (groupName) => {
 		}
 		let messages = await GroupMessage.find(
 			{ to: group._id },
-			{ from: 1, createdAt: 1, body: 1, _id: 0 }
+			{ from: 1, createdAt: 1, body: 1, isMilestone: 1, _id: 0 }
 		)
 			.sort({ createdAt: 1 })
 			.populate({ path: 'from', select: 'username displayName -_id' });

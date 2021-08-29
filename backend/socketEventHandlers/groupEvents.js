@@ -12,7 +12,7 @@ module.exports = (io, socket) => {
 		}
 		const error = groupValidator({ groupName, displayName });
 		if (error) {
-			callback({ isCreated: false, message: error });
+			return callback({ isCreated: false, message: error });
 		}
 		const { status } = await dbOps.Groups.create({
 			groupName,
@@ -29,11 +29,16 @@ module.exports = (io, socket) => {
 		socket.groups = [...socket.groups, groupName];
 		socket.join(`group:${groupName}`);
 
-		await dbOps.GM.create({
-			from: 'admin',
+		const { status: gmStatus, message: gmMessage } = await dbOps.GM.create({
+			from: socket.username,
 			to: groupName,
+			isMilestone: true,
 			body: `${socket.username} created ${groupName}`,
 		});
+
+		if (gmStatus !== 'success') {
+			console.log(gmMessage);
+		}
 
 		callback({ isCreated: true, message: 'Group Created' });
 	};
@@ -50,6 +55,90 @@ module.exports = (io, socket) => {
 		callback({ matchedGroups });
 	};
 
+	const joinGroup = async (payload, callback) => {
+		const { groupName } = payload;
+		const { status } = await dbOps.Users.joinUserTo(
+			socket.username,
+			groupName
+		);
+		if (status !== 'success') {
+			return callback({
+				isJoined: false,
+				message: 'Group does not exist',
+			});
+		}
+		await dbOps.Groups.add(groupName, socket.username);
+		socket.groups = [...socket.groups, groupName];
+		socket.join(`group:${groupName}`);
+
+		const { status: gmStatus, message: gmMessage } = await dbOps.GM.create({
+			from: socket.username,
+			to: groupName,
+			isMilestone: true,
+			body: `${socket.username} joined the group`,
+		});
+
+		if (gmStatus !== 'success') {
+			console.log(gmMessage);
+		}
+
+		// io logic
+		socket.to(`group:${groupName}`).emit('group:message', {
+			from: socket.username,
+			body: `${socket.username} joined the group`,
+			to: groupName,
+			isMilestone: true,
+		});
+
+		return callback({
+			isJoined: true,
+			message: 'Joined the Group',
+		});
+	};
+
+	const leaveGroup = async (payload, callback) => {
+		const { groupName } = payload;
+		const { status } = await dbOps.Users.removeUserFrom(
+			socket.username,
+			groupName
+		);
+		if (status !== 'success') {
+			return callback({
+				isLeft: false,
+				message: 'Group does not exist',
+			});
+		}
+		await dbOps.Groups.remove(groupName, socket.username);
+		socket.groups = socket.groups.filter((group) => group !== groupName);
+
+		const { status: gmStatus, message: gmMessage } = await dbOps.GM.create({
+			from: socket.username,
+			to: groupName,
+			isMilestone: true,
+			body: `${socket.username} left the group`,
+		});
+
+		if (gmStatus !== 'success') {
+			console.log(gmMessage);
+		}
+
+		// io logic
+		socket.to(`group:${groupName}`).emit('group:message', {
+			from: socket.username,
+			body: `${socket.username} left the group`,
+			to: groupName,
+			isMilestone: true,
+		});
+		socket.leave(`group:${groupName}`);
+
+		return callback({
+			isLEft: true,
+			message: 'Left the Group',
+		});
+	};
+
 	socket.on('group:create', createGroup);
 	socket.on('group:search', searchGroup);
+	socket.on('group:join', joinGroup);
+	socket.on('group:leave', leaveGroup);
 };

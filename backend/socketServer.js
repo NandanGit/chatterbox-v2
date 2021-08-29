@@ -10,12 +10,19 @@ const io = socketio(server);
 io.use((socket, next) => {
 	const { authtoken: authToken } = socket.handshake.headers;
 	// console.log(authToken);
-	jwt.verify(authToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-		if (err) return;
-		socket.username = user.username;
-		socket.displayName = user.displayName;
-		next();
-	});
+	jwt.verify(
+		authToken,
+		process.env.ACCESS_TOKEN_SECRET,
+		async (err, user) => {
+			if (err) return next(new Error('Invalid Authentication Token'));
+			const { user: gotUser } = await dbOps.Users.get(user.username);
+			// console.log(gotUser);
+			if (!gotUser) return next(new Error('User not found'));
+			socket.username = user.username;
+			socket.displayName = user.displayName;
+			next();
+		}
+	);
 });
 
 const {
@@ -34,14 +41,14 @@ io.on('connection', async (socket) => {
 		return;
 	}
 	socket.friends = friends.map((friend) => friend.username);
-	console.log('His Friends:', socket.friends);
+	console.log(socket.username, "'s Friends:", socket.friends);
 	// Get all the groups
 	const { groups } = await dbOps.Users.getGroupsOf(socket.username);
 	if (!groups) {
 		return;
 	}
 	socket.groups = groups.map((group) => group.groupName);
-	console.log('His Groups:', socket.groups);
+	console.log(socket.username, "'s Groups:", socket.groups);
 
 	socket.friends.forEach((friend) => {
 		socket.join(`user:${friend}`);

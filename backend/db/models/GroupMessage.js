@@ -16,6 +16,9 @@ const groupMessageSchema = new Schema(
 			type: String,
 			required: [true, 'Message body cannot be empty'],
 		},
+		isMilestone: {
+			type: Boolean,
+		},
 	},
 	{ timestamps: true }
 );
