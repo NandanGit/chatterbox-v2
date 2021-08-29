@@ -1,0 +1,45 @@
+.message-box {
+	/* background: linear-gradient(to left, var(--accent-25), var(--accent-dark)); */
+	height: 7.5rem;
+	/* width: 75%; */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* position: fixed;
+	bottom: 0;
+	right: 0; */
+}
+
+.message-box form {
+	position: relative;
+	width: 90%;
+}
+
+.message-box textarea {
+	background: transparent;
+	border: 2px solid var(--border);
+	border-radius: 0.5rem;
+	padding: 0.75rem;
+
+	width: 100%;
+
+	resize: none;
+	outline: none;
+	color: var(--text-color);
+	font-size: 1rem;
+}
+
+.message-box .send-icon {
+	margin-bottom: -0.1rem;
+	font-size: 2rem;
+}
+
+.message-box .send-message-button {
+	padding: 0;
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: transparent;
+	color: var(--accent);
+}

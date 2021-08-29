@@ -12,6 +12,7 @@
 	--accent-25: #6600ff40;
 	--accent-50: #6600ff80;
 	--accent-75: #6600ffc0;
+	--accent-dark: #308;
 
 	/* Status colors */
 	--success: #080;
@@ -24,6 +25,7 @@
 
 	/*Secondary #84f */
 	--secondary: #84f;
+	--secondary-dark: #84f;
 
 	/* Text color */
 	--text-color: #bbb;

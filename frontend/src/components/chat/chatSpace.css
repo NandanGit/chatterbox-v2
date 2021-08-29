@@ -1,0 +1,8 @@
+.chat-space {
+	padding: 1rem 1rem;
+	display: flex;
+	flex-direction: column;
+
+	overflow-y: scroll;
+	height: calc(100% - 5rem);
+}
