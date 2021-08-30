@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Auth from './components/auth/auth';
 import Chat from './components/chat/chat';
