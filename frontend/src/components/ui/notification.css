@@ -1,0 +1,45 @@
+.notification {
+	position: absolute;
+	top: 0;
+	right: 0;
+	/* transform: translateX(-50%); */
+	max-width: 30%;
+	min-width: 5%;
+	text-align: center;
+	background-color: var(--bg-color);
+	padding: 1rem;
+	border-radius: 0.25rem;
+	margin: 0.25rem;
+
+	display: flex;
+	justify-content: space-between;
+}
+
+.notification .body {
+	margin-right: 1rem;
+}
+
+.icon-button {
+	padding: 0;
+	background-color: transparent;
+	color: var(--text-color);
+	font-size: 1rem;
+	margin-bottom: -0.1rem;
+}
+
+.notification.error {
+	background-color: var(--failure);
+}
+
+.notification.warning {
+	background-color: var(--warning);
+	color: #fff;
+}
+
+.notification.success {
+	background-color: var(--success);
+}
+
+.notification.neutral {
+	background-color: var(--accent-darker);
+}

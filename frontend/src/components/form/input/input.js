@@ -16,8 +16,8 @@ function Input(props) {
 				<input
 					{...props}
 					type={props.type || 'text'}
-					className={`${props.className}`}
-					ref={props.ref}
+					className={`${props.className || ''}`}
+					ref={props.refer}
 				/>
 				{props.status && (
 					<Icon

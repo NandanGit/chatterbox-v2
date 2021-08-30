@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken');
 const dbOps = require('../db/operations');
 const { userValidator } = require('../utils/validators');
 
-const generateToken = () => {};
-
 exports.signupController = async (req, res) => {
 	const { username, displayName, password } = req.body;
 	// Validation
@@ -50,14 +48,15 @@ exports.signupController = async (req, res) => {
 
 exports.loginController = async (req, res) => {
 	const { username, password } = req.body;
+	console.log(username, password);
+
 	const { user } = await dbOps.Users.get(username);
 	if (!user) {
-		return res.json({ status: 'error', message: 'Invalid Credentials' });
+		return res.json({ status: 'error', message: 'User not found' });
 	}
 
-	console.log('Until here');
 	if (!(await bcrypt.compare(password, user.password))) {
-		return res.json({ status: 'error', message: 'Invalid Credentials' });
+		return res.json({ status: 'error', message: 'Incorrect password' });
 	}
 
 	const accessToken = jwt.sign(
@@ -68,5 +67,7 @@ exports.loginController = async (req, res) => {
 	res.json({
 		status: 'success',
 		accessToken,
+		username: user.username,
+		displayName: user.displayName,
 	});
 };

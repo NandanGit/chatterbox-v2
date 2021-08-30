@@ -19,6 +19,8 @@
 	--success: #080;
 	--failure: #800;
 	--pending: #aa0;
+	--warning: #aa0;
+	--neutral: #008;
 
 	/*Border */
 	--border: #8884;

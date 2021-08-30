@@ -15,16 +15,18 @@ function Signup({ setAuthType }) {
 			/>
 			<Input
 				placeholder="Profile Name"
-				icon="ri:lock-password-line"
+				icon="ant-design:user-outlined"
 				status={'valid'}
 			/>
 			<Input
 				placeholder="Password"
-				icon="akar-icons:person"
+				type="password"
+				icon="ri:lock-password-line"
 				status={'valid'}
 			/>
 			<Input
 				placeholder="Confirm Password"
+				type="password"
 				icon="ri:lock-password-fill"
 				status={'checking'}
 			/>

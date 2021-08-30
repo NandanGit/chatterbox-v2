@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const http = require('http');
+const cors = require('cors');
 
 // Import Routes
 const {
@@ -13,6 +14,7 @@ const app = express();
 
 // Express middleware
 app.use(express.json());
+app.use(cors());
 if (process.env.NODE_ENV !== 'production') {
 	app.use(morgan('dev'));
 }
