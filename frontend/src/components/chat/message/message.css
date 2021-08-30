@@ -8,26 +8,28 @@
 
 .message.sent {
 	margin-left: auto;
-	margin-bottom: 1.5rem;
+	/* margin-bottom: 1.5rem; */
 	/* background: var(--accent-dark); */
 	background: linear-gradient(to right, var(--accent-dark), var(--accent-75));
 }
 
 .message.received {
 	margin-right: auto;
-	/* background: var(--accent-25); */
-	background: linear-gradient(to left, var(--accent-dark), var(--accent-75));
+	/* background: var(--accent-darker); */
+	background: linear-gradient(
+		to left,
+		var(--accent-darker),
+		var(--accent-25)
+	);
 }
 .message .body {
 	padding: 0.5rem 0;
 }
 
-.message-status {
+/* .message-status {
 	display: flex;
 	justify-content: flex-end;
-	/* position: absolute;
-	top: 105%; */
-}
+} */
 
 .message-status .time {
 	font-size: 0.6rem;
