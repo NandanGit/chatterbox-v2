@@ -7,7 +7,7 @@ function MessageBox(props) {
 	return (
 		<div className="message-box">
 			<form>
-				<textarea id="message-box-space"></textarea>
+				<input id="message-box-space" />
 				<button className="send-message-button">
 					<Icon
 						icon="fluent:send-16-filled"

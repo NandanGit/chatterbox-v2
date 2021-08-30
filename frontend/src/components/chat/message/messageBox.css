@@ -15,7 +15,7 @@
 	width: 90%;
 }
 
-.message-box textarea {
+.message-box input {
 	background: transparent;
 	border: 2px solid var(--border);
 	border-radius: 0.5rem;
@@ -31,7 +31,7 @@
 
 .message-box .send-icon {
 	margin-bottom: -0.1rem;
-	font-size: 2rem;
+	font-size: 1.5rem;
 }
 
 .message-box .send-message-button {
