@@ -8,8 +8,8 @@ const dbOps = require('./db/operations');
 const io = socketio(server);
 
 io.use((socket, next) => {
-	const { authtoken: authToken } = socket.handshake.headers;
-	// console.log(authToken);
+	const authToken =
+		socket.handshake.headers.authtoken || socket.handshake.auth.authtoken;
 	jwt.verify(
 		authToken,
 		process.env.ACCESS_TOKEN_SECRET,
@@ -20,7 +20,7 @@ io.use((socket, next) => {
 			if (!gotUser) return next(new Error('User not found'));
 			socket.username = user.username;
 			socket.displayName = user.displayName;
-			next();
+			next(new Error('Invalid Auth Token, Try logging in again'));
 		}
 	);
 });

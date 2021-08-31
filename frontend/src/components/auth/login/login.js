@@ -33,7 +33,7 @@ function Login({ setAuthType }) {
 				body: JSON.stringify({ username, password }),
 			});
 			data = await response.json();
-			console.log(data);
+			// console.log(data);
 		} catch (err) {
 			setUsernameStatus('');
 			setPasswordStatus('');

@@ -37,3 +37,18 @@
 .right-panel .header .icon {
 	font-size: 2rem;
 }
+
+.connecting-icon {
+	color: var(--accent);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.connecting-icon .icon {
+	font-size: 5rem;
+}
