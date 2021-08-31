@@ -28,45 +28,45 @@ function ChatSpace({ socket }) {
 	const { type: chatType, username: friendName, groupName } = activeChat;
 	const { user: currentUser } = useSelector((state) => state.app);
 	console.log(currentUser);
-	useEffect(() => {
-		console.log('Use effect is running');
-		if (chatType === 'user') {
-			socket.emit(
-				'direct:fetch:conversation',
-				{ friendName },
-				({ messages: receivedMessages, message }) => {
-					if (message) {
-						return console.log(message);
-					}
-					// console.log(receivedMessages);
-					fire(
-						chatActions.updateDirectMessages({
-							username: friendName,
-							messages: receivedMessages,
-						})
-					);
-				}
-			);
-		} else {
-			socket.emit(
-				'group:fetch:conversation',
-				{ groupName },
-				({ messages: receivedMessages, message }) => {
-					if (message) {
-						return console.log(message);
-					}
-					console.log(receivedMessages);
-					fire(
-						chatActions.updateGroupMessages({
-							groupName,
-							messages: receivedMessages,
-							currentUsername: currentUser.username,
-						})
-					);
-				}
-			);
-		}
-	}, [chatType, friendName, fire, socket, groupName, currentUser]);
+	// useEffect(() => {
+	// 	console.log('Use effect is running');
+	// 	if (chatType === 'user') {
+	// 		socket.emit(
+	// 			'direct:fetch:conversation',
+	// 			{ friendName },
+	// 			({ messages: receivedMessages, message }) => {
+	// 				if (message) {
+	// 					return console.log(message);
+	// 				}
+	// 				// console.log(receivedMessages);
+	// 				fire(
+	// 					chatActions.updateDirectMessages({
+	// 						username: friendName,
+	// 						messages: receivedMessages,
+	// 					})
+	// 				);
+	// 			}
+	// 		);
+	// 	} else {
+	// 		socket.emit(
+	// 			'group:fetch:conversation',
+	// 			{ groupName },
+	// 			({ messages: receivedMessages, message }) => {
+	// 				if (message) {
+	// 					return console.log(message);
+	// 				}
+	// 				console.log(receivedMessages);
+	// 				fire(
+	// 					chatActions.updateGroupMessages({
+	// 						groupName,
+	// 						messages: receivedMessages,
+	// 						currentUsername: currentUser.username,
+	// 					})
+	// 				);
+	// 			}
+	// 		);
+	// 	}
+	// }, [chatType, friendName, fire, socket, groupName, currentUser]);
 	const messages = activeChat.messages.map((message, ind) => (
 		<Message key={ind} {...message} />
 	));

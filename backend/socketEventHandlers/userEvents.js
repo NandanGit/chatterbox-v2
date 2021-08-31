@@ -30,7 +30,32 @@ module.exports = (io, socket) => {
 		callback({ groups });
 	};
 
+	const getAllMessages = async (payload, callback) => {
+		const allMessages = { directMessages: {}, groupMessages: {} };
+		// Messages of all friends
+		for (friend of socket.friends) {
+			const { messages } = await dbOps.DM.retrieve(
+				socket.username,
+				friend
+			);
+			if (!messages) {
+				continue;
+			}
+			allMessages.directMessages[friend] = messages;
+		}
+		// Messages of all groups
+		for (group of socket.groups) {
+			const { messages } = await dbOps.GM.retrieve(group);
+			if (!messages) {
+				continue;
+			}
+			allMessages.groupMessages[group] = messages;
+		}
+		callback({ allMessages });
+	};
+
 	socket.on('user:search', searchUser);
 	socket.on('user:fetch:friends', getFriends);
 	socket.on('user:fetch:groups', getGroups);
+	socket.on('user:fetch:all:messages', getAllMessages);
 };

@@ -72,6 +72,41 @@ const chatSlice = createSlice({
 			}
 			state.activeChat.messages = messages;
 		},
+		updateAllMessages(state, { payload: { allMessages } }) {
+			console.log('updateAllMessages: ', allMessages);
+			// Direct messages
+			const directMessages = allMessages.directMessages;
+			for (const friendName in directMessages) {
+				const messages = directMessages[friendName].map((message) => ({
+					body: message.body,
+					createdAt: message.createdAt,
+					type:
+						message.from.username !== allMessages.username
+							? 'received'
+							: 'sent',
+				}));
+				state.directMessages[friendName] = messages;
+			}
+
+			// Group Messages
+			const groupMessages = allMessages.groupMessages;
+			for (const groupName in groupMessages) {
+				const messages = groupMessages[groupName].map((message) => ({
+					body: message.body,
+					createdAt: message.createdAt,
+					sender:
+						message.from.username !== allMessages.username
+							? message.from.username
+							: undefined,
+					isMilestone: message.isMilestone,
+					type:
+						message.from.username !== allMessages.username
+							? 'received'
+							: 'sent',
+				}));
+				state.groupMessages[groupName] = messages;
+			}
+		},
 	},
 });
 

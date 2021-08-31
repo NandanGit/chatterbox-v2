@@ -24,21 +24,21 @@ function Recents({ socket }) {
 		);
 	// console.log(recents);
 
-	useEffect(() => {
-		console.log('Recents called');
-		socket.emit('user:fetch:friends', {}, ({ friends, message }) => {
-			if (message) {
-				return;
-			}
-			fire(connectionsActions.updateFriends({ friends }));
-		});
-		socket.emit('user:fetch:groups', {}, ({ groups, message }) => {
-			if (message) {
-				return;
-			}
-			fire(connectionsActions.updateGroups({ groups }));
-		});
-	}, [socket, fire]);
+	// useEffect(() => {
+	// 	console.log('Recents called');
+	// 	socket.emit('user:fetch:friends', {}, ({ friends, message }) => {
+	// 		if (message) {
+	// 			return;
+	// 		}
+	// 		fire(connectionsActions.updateFriends({ friends }));
+	// 	});
+	// 	socket.emit('user:fetch:groups', {}, ({ groups, message }) => {
+	// 		if (message) {
+	// 			return;
+	// 		}
+	// 		fire(connectionsActions.updateGroups({ groups }));
+	// 	});
+	// }, [socket, fire]);
 
 	const openChatHandler = (chatDetails) => {
 		// console.log(chatDetails);

@@ -35,6 +35,7 @@ const {
 	userEventHandler,
 	groupEventHandler,
 } = require('./socketEventHandlers');
+const getAllMessages = require('./socketEventHandlers/functions/allMessages');
 
 io.on('connection', async (socket) => {
 	socket.join(`user:${socket.username}`);
@@ -62,6 +63,10 @@ io.on('connection', async (socket) => {
 	});
 
 	socket.emit('notification', 'connection established');
+	const allMessages = await getAllMessages(socket);
+	socket.emit('all:messages', allMessages);
+	socket.emit('all:friends', friends);
+	socket.emit('all:groups', groups);
 	dmEventHandler(io, socket);
 	gmEventHandler(io, socket);
 	userEventHandler(io, socket);

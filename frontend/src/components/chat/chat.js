@@ -11,12 +11,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appActions } from '../../store/app-slice';
 import env from '../../env';
 import SearchResults from './search/searchResults';
+import { connectionsActions } from '../../store/connections-slice';
+import { chatActions } from '../../store/chat-slice';
 
 const socket = io(env.variables.HOST_URL, {
 	transports: ['websocket', 'polling', 'flashsocket'],
 	autoConnect: false,
 	auth: {},
 });
+
+let didFetchMessages = false;
 
 function Chat() {
 	const fire = useDispatch();
@@ -26,13 +30,43 @@ function Chat() {
 	const [socketConnected, setSocketConnected] = useState(false);
 
 	useEffect(() => {
+		if (socketConnected) {
+			socket.on('all:messages', (allMessages) => {
+				console.log(allMessages);
+				fire(chatActions.updateAllMessages({ allMessages }));
+			});
+			socket.on('all:friends', (allFriends) => {
+				console.log(allFriends);
+				fire(connectionsActions.updateFriends({ friends: allFriends }));
+			});
+			socket.on('all:groups', (allGroups) => {
+				console.log(allGroups);
+				fire(connectionsActions.updateGroups({ groups: allGroups }));
+			});
+		}
+	}, [socketConnected, fire]);
+
+	useEffect(() => {
 		if (!socketConnected) {
 			socket.auth.authtoken = authToken;
 			socket.connect();
 		}
 	}, [authToken, socketConnected]);
+	if (!didFetchMessages && socketConnected) {
+		console.log('Fetching all messages');
+		socket.emit('user:fetch:all:messages', {}, ({ allMessages }) => {
+			console.log(allMessages);
+		});
+
+		didFetchMessages = true;
+	}
 
 	socket.on('connect', () => {
+		// Fetch all the messages
+		// console.log('Fetching all messages');
+		// socket.emit('user:fetch:all:messages', {}, ({ allMessages }) => {
+		// 	console.log(allMessages);
+		// });
 		setSocketConnected(true);
 	});
 
