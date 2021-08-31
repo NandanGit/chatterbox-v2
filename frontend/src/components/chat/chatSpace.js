@@ -1,25 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { chatActions } from '../../store/chat-slice';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 import './chatSpace.css';
 import Message from './message/message';
-
-// const MESSAGES = [
-// 	{ type: 'received', body: 'Hi ra Nandan' },
-// 	{ type: 'sent', body: 'Hi ra Jayanth', status: 'sent' },
-// 	{
-// 		type: 'received',
-// 		body: 'Em chesthunnav?'.repeat(25),
-// 		sender: 'Jayanth',
-// 	},
-// 	{ type: 'sent', body: 'You?', status: 'failed' },
-// 	{ type: 'sent', body: 'Nothing', status: 'sending' },
-// 	{ type: 'sent', body: 'You?', status: 'failed' },
-// 	{ type: 'sent', body: 'You?', status: 'failed' },
-// 	{ type: 'sent', body: 'You?'.repeat(30), status: 'failed' },
-// 	{ type: 'sent', body: 'You?', status: 'failed' },
-// ];
 
 function ChatSpace({ socket }) {
 	// console.log(activeChat);
