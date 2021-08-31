@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { chatActions } from '../../../store/chat-slice';
+import { connectionsActions } from '../../../store/connections-slice';
 import Recent from './recent';
 
 import './recents.css';
@@ -12,18 +13,11 @@ function Recents({ socket }) {
 	const { friends: friendsArr, groups: groupsArr } = useSelector(
 		(state) => state.connections
 	);
-	const recents = friendsArr
-		.map((friend) => ({ ...friend, type: 'user', active: false }))
-		.concat(
-			groupsArr.map((group) => ({
-				...group,
-				type: 'group',
-				active: false,
-			}))
-		);
+	const recents = friendsArr.concat(groupsArr);
 	const openChatHandler = (chatDetails) => {
 		// console.log(chatDetails);
 		fire(chatActions.changeActiveChat(chatDetails));
+		fire(connectionsActions.changeActiveChat(chatDetails));
 	};
 
 	const recentsArr = recents.map((recent) => (

@@ -8,7 +8,7 @@ function ChatSpace({ socket }) {
 	// console.log(activeChat);
 	const activeChat = useSelector((state) => state.chat.activeChat);
 	const { user: currentUser } = useSelector((state) => state.app);
-	console.log(currentUser);
+	// console.log(currentUser);
 	const messages = activeChat.messages.map((message, ind) => (
 		<Message key={ind} {...message} />
 	));
