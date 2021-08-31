@@ -26,12 +26,17 @@ function Chat() {
 		if (!socketConnected) {
 			socket.auth.authtoken = authToken;
 			socket.connect();
-			setSocketConnected(true);
 		}
 	}, [authToken, socketConnected]);
 
+	socket.on('connect', () => {
+		setSocketConnected(true);
+	});
+
 	const logoutHandler = () => {
 		fire(appActions.logout());
+		localStorage.removeItem('user');
+		window.location.reload();
 	};
 
 	return (

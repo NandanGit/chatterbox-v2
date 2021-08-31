@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialSearchState = {
+	isActive: false,
 	keyword: '',
 	userResults: [],
 	groupResults: [],

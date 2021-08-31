@@ -19,7 +19,9 @@ function Recent(props) {
 				/>
 				{props.displayName}
 			</span>
-			<span className="username">@{props.username}</span>
+			<span className="username group-name">
+				@{props.username || props.groupName}
+			</span>
 		</div>
 	);
 }

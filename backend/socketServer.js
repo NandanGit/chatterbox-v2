@@ -10,17 +10,21 @@ const io = socketio(server);
 io.use((socket, next) => {
 	const authToken =
 		socket.handshake.headers.authtoken || socket.handshake.auth.authtoken;
+	// console.log(authToken);
 	jwt.verify(
 		authToken,
 		process.env.ACCESS_TOKEN_SECRET,
 		async (err, user) => {
-			if (err) return next(new Error('Invalid Authentication Token'));
+			if (err)
+				return next(
+					new Error('Invalid Auth Token, Try logging in again')
+				);
 			const { user: gotUser } = await dbOps.Users.get(user.username);
 			// console.log(gotUser);
 			if (!gotUser) return next(new Error('User not found'));
 			socket.username = user.username;
 			socket.displayName = user.displayName;
-			next(new Error('Invalid Auth Token, Try logging in again'));
+			next();
 		}
 	);
 });
@@ -62,4 +66,7 @@ io.on('connection', async (socket) => {
 	gmEventHandler(io, socket);
 	userEventHandler(io, socket);
 	groupEventHandler(io, socket);
+	socket.on('check:connection', (payload, callback) => {
+		callback({ isConnected: true });
+	});
 });

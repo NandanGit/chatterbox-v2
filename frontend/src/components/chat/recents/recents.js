@@ -1,45 +1,72 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { connectionsActions } from '../../../store/connections-slice';
+import { notificationActions } from '../../../store/notification-slice';
 import Recent from './recent';
 
 import './recents.css';
 
-const RECENTS = [
-	{ username: 'jay', displayName: 'Jayanth', type: 'user', active: false },
-	{
-		username: 'boss',
-		displayName: 'Navadeep',
-		type: 'user',
-		active: false,
-	},
-	{
-		username: 'sp1',
-		displayName: 'Super 100 1',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'abdul',
-		displayName: 'Abdul Kalam',
-		type: 'user',
-		active: true,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-];
-
-function Recents(props) {
+function Recents({ socket }) {
+	const fire = useDispatch();
 	const user = useSelector((state) => state.app.user);
+
+	const { friends: friendsArr, groups: groupsArr } = useSelector(
+		(state) => state.connections
+	);
+	const recents = friendsArr
+		.map((friend) => ({ ...friend, type: 'user', active: false }))
+		.concat(
+			groupsArr.map((group) => ({
+				...group,
+				type: 'group',
+				active: false,
+			}))
+		);
+	// console.log(recents);
+
+	useEffect(() => {
+		// console.log('Recents called');
+		socket.emit('user:fetch:friends', '', ({ friends, message }) => {
+			if (message) {
+				return fire(
+					notificationActions.notify({
+						body: message,
+						type: 'warning',
+						closeTime: 3000,
+					})
+				);
+			}
+			fire(connectionsActions.updateFriends({ friends }));
+		});
+		socket.emit('user:fetch:groups', '', ({ groups, message }) => {
+			if (message) {
+				return fire(
+					notificationActions.notify({
+						body: message,
+						type: 'warning',
+						closeTime: 3000,
+					})
+				);
+			}
+			fire(connectionsActions.updateGroups({ groups }));
+		});
+	}, [socket, fire]);
+
+	const recentsArr = recents.map((recent) => (
+		<Recent key={recent.username || recent.groupName} {...recent} />
+	));
 	return (
 		<div className="recents panel-items">
-			<h3 className="panel-title">Recents for {user.displayName}</h3>
-			{RECENTS.map((recent) => (
-				<Recent key={recent.username} {...recent} />
-			))}
+			<h3 className="panel-title">{user.displayName}'s Recent chats</h3>
+			{recentsArr.length ? (
+				recentsArr
+			) : (
+				<div className="no-friends">
+					<h2>No friends to show!!</h2>
+					<br />
+					<h3>Use the search bar to find friends</h3>
+				</div>
+			)}
 		</div>
 	);
 }
