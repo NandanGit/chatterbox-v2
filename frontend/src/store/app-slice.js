@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialAppState = {
-	socket: undefined,
-};
+const initialAppState = {};
 
 try {
 	const user = JSON.parse(localStorage.getItem('user'));

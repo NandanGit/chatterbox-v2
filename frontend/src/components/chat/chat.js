@@ -21,6 +21,7 @@ const socket = io(env.variables.HOST_URL, {
 function Chat() {
 	const fire = useDispatch();
 	const { authToken } = useSelector((state) => state.app);
+	const { activeChat } = useSelector((state) => state.chat);
 	const { isActive: isSearching } = useSelector((state) => state.search);
 	const [socketConnected, setSocketConnected] = useState(false);
 
@@ -54,22 +55,26 @@ function Chat() {
 						)}
 					</div>
 					<div className="right-panel">
-						<h1 className="header">
-							<span>Jayanth</span>
-							<button
-								onClick={logoutHandler}
-								className="icon-button"
-							>
-								<abbr title="Logout">
-									<Icon
-										icon="heroicons-outline:logout"
-										className="icon"
-									/>
-								</abbr>
-							</button>
-						</h1>
-						<ChatSpace socket={socket} />
-						<MessageBox socket={socket} />
+						<button onClick={logoutHandler} className="icon-button">
+							<abbr title="Logout">
+								<Icon
+									icon="heroicons-outline:logout"
+									className="icon"
+								/>
+							</abbr>
+						</button>
+						{activeChat && (
+							<React.Fragment>
+								<h1 className="header">
+									<span>{activeChat.displayName}</span>
+								</h1>
+								<ChatSpace
+									activeChat={activeChat}
+									socket={socket}
+								/>
+								<MessageBox socket={socket} />
+							</React.Fragment>
+						)}
 					</div>
 				</React.Fragment>
 			) : (

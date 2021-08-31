@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { chatActions } from '../../../store/chat-slice';
 import { connectionsActions } from '../../../store/connections-slice';
-import { notificationActions } from '../../../store/notification-slice';
 import Recent from './recent';
 
 import './recents.css';
@@ -26,28 +25,16 @@ function Recents({ socket }) {
 	// console.log(recents);
 
 	useEffect(() => {
-		// console.log('Recents called');
-		socket.emit('user:fetch:friends', '', ({ friends, message }) => {
+		console.log('Recents called');
+		socket.emit('user:fetch:friends', {}, ({ friends, message }) => {
 			if (message) {
-				return fire(
-					notificationActions.notify({
-						body: message,
-						type: 'warning',
-						closeTime: 3000,
-					})
-				);
+				return;
 			}
 			fire(connectionsActions.updateFriends({ friends }));
 		});
-		socket.emit('user:fetch:groups', '', ({ groups, message }) => {
+		socket.emit('user:fetch:groups', {}, ({ groups, message }) => {
 			if (message) {
-				return fire(
-					notificationActions.notify({
-						body: message,
-						type: 'warning',
-						closeTime: 3000,
-					})
-				);
+				return;
 			}
 			fire(connectionsActions.updateGroups({ groups }));
 		});

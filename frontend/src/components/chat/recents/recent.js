@@ -12,6 +12,7 @@ function Recent(props) {
 			onClick={props.openChatHandler.bind(this, {
 				type: props.type,
 				name: props.username || props.groupName,
+				displayName: props.displayName,
 			})}
 		>
 			<span className="display-name">

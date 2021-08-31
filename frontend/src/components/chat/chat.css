@@ -34,7 +34,14 @@
 	padding: 2rem;
 }
 
-.right-panel .header .icon {
+.right-panel .icon-button {
+	font-size: 2rem;
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+}
+
+.right-panel .icon-button .icon {
 	font-size: 2rem;
 }
 
