@@ -4,10 +4,11 @@ import { Icon } from '@iconify/react';
 import './search.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchActions } from '../../../store/search-slice';
-import { notificationActions } from '../../../store/notification-slice';
 
 function Search({ socket }) {
 	const fire = useDispatch();
+	const user = useSelector((state) => state.app.user);
+
 	const searchMode = useSelector((state) => state.search.mode);
 	const [searchKeyword, updateSearchKeyword] = useState('');
 
@@ -37,15 +38,12 @@ function Search({ socket }) {
 				{ keyword },
 				({ matchedUsers, message }) => {
 					if (message) {
-						return fire(
-							notificationActions.notify({
-								body: message,
-								type: 'error',
-								closeTime: 3000,
-							})
-						);
+						return;
 					}
-					console.log(matchedUsers);
+					// console.log(matchedUsers);
+					matchedUsers = matchedUsers.filter(
+						(matchedUser) => matchedUser.username !== user.username
+					);
 					fire(
 						searchActions.updateUserResults({
 							userResults: matchedUsers,
@@ -60,15 +58,9 @@ function Search({ socket }) {
 				{ keyword },
 				({ matchedGroups, message }) => {
 					if (message) {
-						return fire(
-							notificationActions.notify({
-								body: message,
-								type: 'error',
-								closeTime: 3000,
-							})
-						);
+						return;
 					}
-					console.log(matchedGroups);
+					// console.log(matchedGroups);
 					fire(
 						searchActions.updateGroupResults({
 							groupResults: matchedGroups,
@@ -84,7 +76,7 @@ function Search({ socket }) {
 	};
 
 	return (
-		<div className="search-container">
+		<div onBlur={exitSearchHandler} className="search-container">
 			{/* <select name="search-mode" id="search-mode-selector">
 				<option value="users" selected>
 					Users
@@ -106,7 +98,6 @@ function Search({ socket }) {
 					onChange={searchHandler}
 					className="search-bar"
 					placeholder={`Search ${searchMode}...`}
-					onBlur={exitSearchHandler}
 					value={searchKeyword}
 				/>
 				<button>

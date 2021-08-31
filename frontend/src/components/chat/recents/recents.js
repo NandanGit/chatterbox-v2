@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { chatActions } from '../../../store/chat-slice';
 import { connectionsActions } from '../../../store/connections-slice';
 import { notificationActions } from '../../../store/notification-slice';
 import Recent from './recent';
@@ -52,8 +53,17 @@ function Recents({ socket }) {
 		});
 	}, [socket, fire]);
 
+	const openChatHandler = (chatDetails) => {
+		// console.log(chatDetails);
+		fire(chatActions.changeActiveChat(chatDetails));
+	};
+
 	const recentsArr = recents.map((recent) => (
-		<Recent key={recent.username || recent.groupName} {...recent} />
+		<Recent
+			openChatHandler={openChatHandler}
+			key={recent.username || recent.groupName}
+			{...recent}
+		/>
 	));
 	return (
 		<div className="recents panel-items">

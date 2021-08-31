@@ -9,6 +9,10 @@ function Recent(props) {
 			className={`recent panel-item ${props.className} ${
 				props.active ? ' active' : ''
 			}`}
+			onClick={props.openChatHandler.bind(this, {
+				type: props.type,
+				name: props.username || props.groupName,
+			})}
 		>
 			<span className="display-name">
 				<Icon
