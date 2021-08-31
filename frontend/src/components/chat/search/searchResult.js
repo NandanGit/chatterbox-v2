@@ -1,15 +1,11 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
-import './recent.css';
+import './searchResult.css';
 
-function Recent(props) {
+function SearchResult(props) {
 	return (
-		<div
-			className={`recent panel-item ${props.className} ${
-				props.active ? ' active' : ''
-			}`}
-		>
+		<div className={`search-result panel-item`}>
 			<span className="display-name">
 				<Icon
 					icon={
@@ -26,4 +22,4 @@ function Recent(props) {
 	);
 }
 
-export default Recent;
+export default SearchResult;

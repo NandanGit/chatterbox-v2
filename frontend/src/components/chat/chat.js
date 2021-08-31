@@ -10,6 +10,7 @@ import Search from './search/search';
 import { useDispatch, useSelector } from 'react-redux';
 import { appActions } from '../../store/app-slice';
 import env from '../../env';
+import SearchResults from './search/searchResults';
 
 const socket = io(env.variables.HOST_URL, {
 	transports: ['websocket', 'polling', 'flashsocket'],
@@ -20,6 +21,7 @@ const socket = io(env.variables.HOST_URL, {
 function Chat() {
 	const fire = useDispatch();
 	const { authToken } = useSelector((state) => state.app);
+	const { isActive: isSearching } = useSelector((state) => state.search);
 	const [socketConnected, setSocketConnected] = useState(false);
 
 	useEffect(() => {
@@ -45,7 +47,11 @@ function Chat() {
 				<React.Fragment>
 					<div className="left-panel">
 						<Search socket={socket} searchMode={'groups'} />
-						<Recents socket={socket} />
+						{isSearching ? (
+							<SearchResults />
+						) : (
+							<Recents socket={socket} />
+						)}
 					</div>
 					<div className="right-panel">
 						<h1 className="header">

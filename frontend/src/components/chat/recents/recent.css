@@ -17,7 +17,7 @@
 	background: linear-gradient(45deg, var(--accent-dark), var(--accent-25));
 }
 
-.recent .username {
+.panel-item .username {
 	font-size: 0.75rem;
 }
 

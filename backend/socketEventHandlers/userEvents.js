@@ -10,6 +10,7 @@ module.exports = (io, socket) => {
 			});
 		}
 		const { matchedUsers } = await dbOps.Users.search(keyword);
+		console.log(matchedUsers);
 		callback({ matchedUsers });
 	};
 
