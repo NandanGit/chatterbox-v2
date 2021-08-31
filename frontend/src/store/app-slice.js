@@ -1,17 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialAppState = {
-	isLoggedIn: false,
-	authToken: undefined,
 	socket: undefined,
-	user: undefined,
 };
+
+try {
+	const user = JSON.parse(localStorage.getItem('user'));
+	initialAppState.user = user.user;
+	initialAppState.authToken = user.authToken;
+	initialAppState.isLoggedIn = true;
+} catch (err) {
+	initialAppState.isLoggedIn = false;
+	initialAppState.user = undefined;
+	initialAppState.authToken = undefined;
+}
 
 const appSlice = createSlice({
 	name: 'app',
 	initialState: initialAppState,
 	reducers: {
-		login(state, { authToken, user }) {
+		login(state, { payload: { authToken, user } }) {
 			state.isLoggedIn = true;
 			state.authToken = authToken;
 			state.user = user;
@@ -22,7 +30,7 @@ const appSlice = createSlice({
 			state.socket = undefined;
 			state.authToken = undefined;
 		},
-		setSocket(state, { socket }) {
+		setSocket(state, { payload: { socket } }) {
 			state.socket = socket;
 		},
 	},

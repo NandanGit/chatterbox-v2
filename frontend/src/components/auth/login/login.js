@@ -16,14 +16,14 @@ function Login({ setAuthType }) {
 	const [usernameStatus, setUsernameStatus] = useState('');
 	const [passwordStatus, setPasswordStatus] = useState('');
 
-	const loginHandler = async () => {
+	const loginHandler = async (event) => {
+		event.preventDefault();
 		const username = usernameRef.current.value;
 		const password = passwordRef.current.value;
 
 		setUsernameStatus('checking');
 		setPasswordStatus('checking');
 
-		console.log(username, password);
 		let data;
 		try {
 			const response = await fetch(`${env.variables.HOST_URL}/login`, {
@@ -39,8 +39,8 @@ function Login({ setAuthType }) {
 			setPasswordStatus('');
 			return fire(
 				notificationActions.notify({
-					// body: "Couldn't connect to the internet",
-					body: err.message,
+					body: "Couldn't connect to the internet",
+					// body: err.message,
 					type: 'error',
 					closeTime: 3000,
 				})
@@ -64,33 +64,26 @@ function Login({ setAuthType }) {
 		}
 		setUsernameStatus('valid');
 		setPasswordStatus('valid');
-		fire(
-			notificationActions.notify({
-				body: 'Authenticated',
-				type: 'success',
-				closeTime: 1000,
+		// Store the user to localStorage
+		localStorage.setItem(
+			'user',
+			JSON.stringify({
+				authToken: data.accessToken,
+				user: {
+					username: data.username,
+					displayName: data.displayName,
+				},
 			})
 		);
-		setTimeout(() => {
-			fire(
-				notificationActions.notify({
-					body: 'Starting App...',
-					type: 'success',
-					closeTime: 1000,
-				})
-			);
-		}, 1000);
-		setTimeout(() => {
-			fire(
-				appActions.login({
-					authToken: data.accessToken,
-					user: {
-						username: data.username,
-						displayName: data.displayName,
-					},
-				})
-			);
-		}, 2000);
+		fire(
+			appActions.login({
+				authToken: data.accessToken,
+				user: {
+					username: data.username,
+					displayName: data.displayName,
+				},
+			})
+		);
 	};
 
 	const usernameModifier = (event) => {
@@ -103,7 +96,7 @@ function Login({ setAuthType }) {
 	};
 
 	return (
-		<div className="login-container">
+		<form onSubmit={loginHandler} className="login-container">
 			<h1>Login</h1>
 			<Input
 				placeholder="Username"
@@ -120,7 +113,7 @@ function Login({ setAuthType }) {
 				refer={passwordRef}
 			/>
 			<div className="actions">
-				<Button onClick={loginHandler}>Login</Button>
+				<Button>Login</Button>
 				<Button
 					onClick={setAuthType.bind(this, 'signup')}
 					className="outline"
@@ -128,7 +121,7 @@ function Login({ setAuthType }) {
 					Signup
 				</Button>
 			</div>
-		</div>
+		</form>
 	);
 }
 

@@ -28,7 +28,12 @@
 	background: var(--accent-25);
 	box-shadow: inset -1rem 0px 1rem -1.5rem var(--accent);
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 	padding: 2rem;
+}
+
+.right-panel .header .icon {
+	font-size: 2rem;
 }

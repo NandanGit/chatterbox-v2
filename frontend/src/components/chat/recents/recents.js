@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Recent from './recent';
 
 import './recents.css';
@@ -29,48 +30,13 @@ const RECENTS = [
 		type: 'group',
 		active: false,
 	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
-	{
-		username: 'sp2',
-		displayName: 'Super 100 2',
-		type: 'group',
-		active: false,
-	},
 ];
 
 function Recents(props) {
+	const user = useSelector((state) => state.app.user);
 	return (
 		<div className="recents panel-items">
-			<h3 className="panel-title">Recents</h3>
+			<h3 className="panel-title">Recents for {user.displayName}</h3>
 			{RECENTS.map((recent) => (
 				<Recent key={recent.username} {...recent} />
 			))}
