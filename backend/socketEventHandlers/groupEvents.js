@@ -33,12 +33,20 @@ module.exports = (io, socket) => {
 			from: socket.username,
 			to: groupName,
 			isMilestone: true,
-			body: `${socket.username} created ${groupName}`,
+			body: `${socket.displayName} created ${displayName}`,
 		});
 
 		if (gmStatus !== 'success') {
 			console.log(gmMessage);
 		}
+
+		// io logic
+		io.to(`group:${to}`).emit('group:message', {
+			from: socket.username,
+			to: groupName,
+			isMilestone: true,
+			body: `${socket.displayName} created ${displayName}`,
+		});
 
 		callback({ isCreated: true, message: 'Group Created' });
 	};
@@ -83,7 +91,7 @@ module.exports = (io, socket) => {
 		}
 
 		// io logic
-		socket.to(`group:${groupName}`).emit('group:message', {
+		io.to(`group:${groupName}`).emit('group:message', {
 			from: socket.username,
 			body: `${socket.displayName} joined the group`,
 			to: groupName,
@@ -123,7 +131,7 @@ module.exports = (io, socket) => {
 		}
 
 		// io logic
-		socket.to(`group:${groupName}`).emit('group:message', {
+		io.to(`group:${groupName}`).emit('group:message', {
 			from: socket.username,
 			body: `${socket.username} left the group`,
 			to: groupName,

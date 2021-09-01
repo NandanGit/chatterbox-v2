@@ -20,7 +20,7 @@ const socket = io(env.variables.HOST_URL, {
 	auth: {},
 });
 
-let didFetchMessages = false;
+let areSocketEventsRegistered = false;
 
 function Chat() {
 	const fire = useDispatch();
@@ -29,22 +29,81 @@ function Chat() {
 	const { isActive: isSearching } = useSelector((state) => state.search);
 	const [socketConnected, setSocketConnected] = useState(false);
 
-	useEffect(() => {
-		if (socketConnected) {
-			socket.on('all:messages', (allMessages) => {
-				console.log(allMessages);
-				fire(chatActions.updateAllMessages({ allMessages }));
-			});
-			socket.on('all:friends', (allFriends) => {
-				console.log(allFriends);
-				fire(connectionsActions.updateFriends({ friends: allFriends }));
-			});
-			socket.on('all:groups', (allGroups) => {
-				console.log(allGroups);
-				fire(connectionsActions.updateGroups({ groups: allGroups }));
-			});
-		}
-	}, [socketConnected, fire]);
+	// useEffect(() => {
+	// 	if (socketConnected) {
+	// 		socket.on('all:messages', (allMessages) => {
+	// 			// console.log(allMessages);
+	// 			fire(chatActions.updateAllMessages({ allMessages }));
+	// 		});
+	// 		socket.on('all:friends', (allFriends) => {
+	// 			// console.log(allFriends);
+	// 			fire(connectionsActions.updateFriends({ friends: allFriends }));
+	// 		});
+	// 		socket.on('all:groups', (allGroups) => {
+	// 			// console.log(allGroups);
+	// 			fire(connectionsActions.updateGroups({ groups: allGroups }));
+	// 		});
+	// 		socket.on('direct:message', (message) => {
+	// 			console.log(message);
+	// 			// fire(
+	// 			// 	chatActions.addDirectMessage({
+	// 			// 		...message,
+	// 			// 		createdAt: new Date().toDateString(),
+	// 			// 	})
+	// 			// );
+	// 			// if (activeChat && message.from === activeChat.username) {
+	// 			// 	fire(
+	// 			// 		chatActions.updateActiveChat({
+	// 			// 			type: 'user',
+	// 			// 			name: activeChat.username,
+	// 			// 		})
+	// 			// 	);
+	// 			// }
+	// 		});
+	// 		socket.on('group:message', (message) => {
+	// 			console.log(message);
+	// 			// fire(
+	// 			// 	chatActions.addGroupMessage({
+	// 			// 		...message,
+	// 			// 		createdAt: new Date().toDateString(),
+	// 			// 	})
+	// 			// );
+	// 			// if (activeChat && message.to === activeChat.groupName) {
+	// 			// 	fire(
+	// 			// 		chatActions.updateActiveChat({
+	// 			// 			type: 'group',
+	// 			// 			name: activeChat.groupName,
+	// 			// 		})
+	// 			// 	);
+	// 			// }
+	// 		});
+	// 	}
+	// }, [socketConnected, fire]);
+
+	if (!areSocketEventsRegistered && socketConnected) {
+		socket.on('all:messages', (allMessages) => {
+			// console.log(allMessages);
+			fire(chatActions.updateAllMessages({ allMessages }));
+		});
+		socket.on('all:friends', (allFriends) => {
+			// console.log(allFriends);
+			fire(connectionsActions.updateFriends({ friends: allFriends }));
+		});
+		socket.on('all:groups', (allGroups) => {
+			// console.log(allGroups);
+			fire(connectionsActions.updateGroups({ groups: allGroups }));
+		});
+		socket.on('direct:message', (message) => {
+			console.log(message);
+			fire(chatActions.addDirectMessage(message));
+		});
+		socket.on('group:message', (message) => {
+			console.log(message);
+			fire(chatActions.addGroupMessage(message));
+		});
+
+		areSocketEventsRegistered = true;
+	}
 
 	useEffect(() => {
 		if (!socketConnected) {
@@ -52,21 +111,8 @@ function Chat() {
 			socket.connect();
 		}
 	}, [authToken, socketConnected]);
-	if (!didFetchMessages && socketConnected) {
-		console.log('Fetching all messages');
-		socket.emit('user:fetch:all:messages', {}, ({ allMessages }) => {
-			console.log(allMessages);
-		});
-
-		didFetchMessages = true;
-	}
 
 	socket.on('connect', () => {
-		// Fetch all the messages
-		// console.log('Fetching all messages');
-		// socket.emit('user:fetch:all:messages', {}, ({ allMessages }) => {
-		// 	console.log(allMessages);
-		// });
 		setSocketConnected(true);
 	});
 

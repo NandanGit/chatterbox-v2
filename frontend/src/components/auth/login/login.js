@@ -7,6 +7,7 @@ import Button from '../../ui/button';
 
 import env from '../../../env';
 import './login.css';
+import { chatActions } from '../../../store/chat-slice';
 
 function Login({ setAuthType }) {
 	const fire = useDispatch();
@@ -82,6 +83,12 @@ function Login({ setAuthType }) {
 					username: data.username,
 					displayName: data.displayName,
 				},
+			})
+		);
+		fire(
+			chatActions.setUser({
+				username: data.username,
+				displayName: data.displayName,
 			})
 		);
 	};

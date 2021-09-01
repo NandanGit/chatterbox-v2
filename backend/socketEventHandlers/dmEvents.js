@@ -3,6 +3,12 @@ const dbOps = require('../db/operations');
 module.exports = (io, socket) => {
 	const sendDirectMessage = async (payload, callback) => {
 		let { to, body } = payload;
+		if (to === socket.username) {
+			return callback({
+				isSent: false,
+				message: 'You cant send yourself a message yet',
+			});
+		}
 		body = body ? body.trim() : '';
 		if (!body) {
 			return callback({ isSent: false, message: 'Body not provided' });
@@ -23,12 +29,14 @@ module.exports = (io, socket) => {
 			socket.friends = [...socket.friends, to];
 		}
 		await dbOps.DM.create({ from: socket.username, to, body });
-		callback({ isSent: true });
 
 		// io logic
-		socket
-			.to(`user:${to}`)
-			.emit('direct:message', { from: socket.username, body });
+		io.to(`user:${to}`).emit('direct:message', {
+			from: socket.username,
+			body,
+			to,
+		});
+		callback({ isSent: true });
 	};
 
 	const fetchMessages = async (payload, callback) => {
