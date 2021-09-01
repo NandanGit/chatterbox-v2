@@ -27,9 +27,11 @@ module.exports = (io, socket) => {
 		await dbOps.GM.create({ from: socket.username, to, body });
 
 		// io logic
-		socket
-			.to(`group:${to}`)
-			.emit('group:message', { from: socket.username, body, to });
+		io.to(`group:${to}`).emit('group:message', {
+			from: socket.username,
+			body,
+			to,
+		});
 
 		callback({ isSent: true });
 	};
