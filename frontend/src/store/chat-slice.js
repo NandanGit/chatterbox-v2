@@ -55,33 +55,6 @@ const chatSlice = createSlice({
 				state.activeChat.messages.push(message);
 			}
 		},
-		updateDirectMessages(state, { payload: { username, messages } }) {
-			messages = messages.map((message) => ({
-				body: message.body,
-				createdAt: message.createdAt,
-				type: message.from.username === username ? 'received' : 'sent',
-			}));
-			state.directMessages[username] = messages;
-		},
-		updateGroupMessages(
-			state,
-			{ payload: { groupName, messages, currentUsername } }
-		) {
-			messages = messages.map((message) => ({
-				body: message.body,
-				createdAt: message.createdAt,
-				sender:
-					message.from.username !== currentUsername
-						? message.from.username
-						: undefined,
-				isMilestone: message.isMilestone,
-				type:
-					message.from.username !== currentUsername
-						? 'received'
-						: 'sent',
-			}));
-			state.groupMessages[groupName] = messages;
-		},
 		setUser(state, { payload: { username, displayName } }) {
 			state.user = {
 				username,
@@ -108,15 +81,6 @@ const chatSlice = createSlice({
 					state.groupMessages[name] = [];
 					messages = [];
 				}
-			}
-			state.activeChat.messages = messages;
-		},
-		updateActiveChat(state, { payload: { type, name } }) {
-			let messages;
-			if (type === 'user') {
-				messages = state.directMessages[name];
-			} else {
-				messages = state.groupMessages[name];
 			}
 			state.activeChat.messages = messages;
 		},
