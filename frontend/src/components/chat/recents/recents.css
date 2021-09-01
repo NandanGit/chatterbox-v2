@@ -1,6 +1,6 @@
 .panel-title {
 	padding: 0.5rem 1rem;
-	background: linear-gradient(to left, var(--accent-25), var(--accent-50));
+	/* background: linear-gradient(to left, var(--accent-25), var(--accent-50)); */
 }
 
 .panel-items {

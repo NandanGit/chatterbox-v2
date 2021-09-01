@@ -42,11 +42,11 @@
 	padding: 0.5rem 0;
 }
 
-/* .message-status {
+.message-status {
 	display: flex;
 	justify-content: flex-end;
-} */
+}
 
 .message-status .time {
-	font-size: 0.6rem;
+	font-size: 0.5rem;
 }
