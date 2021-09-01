@@ -43,6 +43,8 @@ exports.signupController = async (req, res) => {
 		status: 'success',
 		message: 'User created',
 		accessToken,
+		username,
+		displayName,
 	});
 };
 
