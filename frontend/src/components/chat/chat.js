@@ -64,6 +64,7 @@ function Chat() {
 				{ friendName: from },
 				() => {}
 			);
+			window.location.reload();
 		});
 
 		areSocketEventsRegistered = true;
