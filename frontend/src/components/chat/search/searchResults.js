@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { chatActions } from '../../../store/chat-slice';
 import { connectionsActions } from '../../../store/connections-slice';
+import CreateGroup from './createGroup';
 import SearchResult from './searchResult';
 
 import './searchResults.css';
@@ -80,6 +81,7 @@ function SearchResults({ socket }) {
 					) : (
 						<div className="no-friends">
 							<h2>No groups found</h2>
+							<CreateGroup socket={socket} />
 						</div>
 					)}
 				</React.Fragment>
