@@ -1,13 +1,50 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { chatActions } from '../../../store/chat-slice';
+import { connectionsActions } from '../../../store/connections-slice';
 import SearchResult from './searchResult';
 
 import './searchResults.css';
 
-function SearchResults(props) {
+function SearchResults({ socket }) {
+	const fire = useDispatch();
 	const { keyword, userResults, groupResults, mode } = useSelector(
 		(state) => state.search
 	);
+
+	const openChatHandler = (chatDetails) => {
+		console.log(chatDetails);
+		if (chatDetails.type === 'user') {
+			fire(
+				connectionsActions.addFriend({
+					username: chatDetails.name,
+					displayName: chatDetails.displayName,
+				})
+			);
+			socket.emit(
+				'friend:request',
+				{ friendName: chatDetails.name },
+				() => {}
+			);
+			window.location.reload();
+		} else {
+			fire(
+				connectionsActions.addGroup({
+					groupName: chatDetails.name,
+					displayName: chatDetails.displayName,
+				})
+			);
+			socket.emit(
+				'group:join',
+				{ groupName: chatDetails.name },
+				() => {}
+			);
+			window.location.reload();
+		}
+		fire(chatActions.changeActiveChat(chatDetails));
+		fire(connectionsActions.changeActiveChat(chatDetails));
+	};
+
 	return (
 		<div className="search-results panel-items">
 			{mode !== 'groups' && (
@@ -16,6 +53,7 @@ function SearchResults(props) {
 					{userResults.length ? (
 						userResults.map((result) => (
 							<SearchResult
+								openChatHandler={openChatHandler}
 								key={result.username || result.groupName}
 								{...result}
 							/>
@@ -34,6 +72,7 @@ function SearchResults(props) {
 					{groupResults.length ? (
 						groupResults.map((result) => (
 							<SearchResult
+								openChatHandler={openChatHandler}
 								key={result.username || result.groupName}
 								{...result}
 							/>

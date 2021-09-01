@@ -51,6 +51,21 @@ function Chat() {
 			fire(chatActions.addGroupMessage(message));
 		});
 
+		socket.on('friend:request', ({ from }) => {
+			console.log(`A friend request from ${from}`);
+			fire(
+				connectionsActions.addFriend({
+					username: from,
+					displayName: from,
+				})
+			);
+			socket.emit(
+				'friend:request:accept',
+				{ friendName: from },
+				() => {}
+			);
+		});
+
 		areSocketEventsRegistered = true;
 	}
 
@@ -78,7 +93,7 @@ function Chat() {
 					<div className="left-panel">
 						<Search socket={socket} searchMode={'groups'} />
 						{isSearching ? (
-							<SearchResults />
+							<SearchResults socket={socket} />
 						) : (
 							<Recents socket={socket} />
 						)}

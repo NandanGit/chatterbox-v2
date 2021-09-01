@@ -41,7 +41,7 @@ module.exports = (io, socket) => {
 		}
 
 		// io logic
-		io.to(`group:${to}`).emit('group:message', {
+		io.to(`group:${groupName}`).emit('group:message', {
 			from: socket.username,
 			to: groupName,
 			isMilestone: true,

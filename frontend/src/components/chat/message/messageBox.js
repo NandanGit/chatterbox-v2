@@ -10,6 +10,7 @@ function MessageBox({ socket }) {
 	const receiverName = activeChat.username || activeChat.groupName;
 	const receiverType = activeChat.type;
 
+	console.log(receiverName, receiverType);
 	const sendMessageHandler = (event) => {
 		event.preventDefault();
 		const message = inputRef.current.value.trim();

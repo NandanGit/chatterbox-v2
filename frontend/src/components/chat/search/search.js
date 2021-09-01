@@ -13,11 +13,6 @@ function Search({ socket }) {
 	const [searchKeyword, updateSearchKeyword] = useState('');
 
 	const toggleSearchMode = () => {
-		// setSearchMode((prev) => {
-		// 	if (prev === 'users') return 'groups';
-		// 	if (prev === 'groups') return 'users and groups';
-		// 	return 'users';
-		// });
 		fire(searchActions.updateSearchMode());
 	};
 
@@ -29,13 +24,14 @@ function Search({ socket }) {
 
 	const searchHandler = (event) => {
 		fire(searchActions.enterSearchState());
-		const keyword = event.target.value.trim();
+		const keyword = event.target.value.trimStart();
 		updateSearchKeyword(keyword);
-		fire(searchActions.updateKeyword({ keyword }));
+		if (!keyword) return;
+		fire(searchActions.updateKeyword({ keyword: keyword.trim() }));
 		if (searchMode !== 'groups') {
 			socket.emit(
 				'user:search',
-				{ keyword },
+				{ keyword: keyword.trim() },
 				({ matchedUsers, message }) => {
 					if (message) {
 						return;
@@ -72,25 +68,18 @@ function Search({ socket }) {
 	};
 
 	const exitSearchHandler = () => {
+		updateSearchKeyword('');
 		fire(searchActions.resetSearchState());
 	};
 
 	return (
-		<div onBlur={exitSearchHandler} className="search-container">
-			{/* <select name="search-mode" id="search-mode-selector">
-				<option value="users" selected>
-					Users
-				</option>
-				<option value="rooms">Rooms</option>
-			</select> */}
+		<div className="search-container">
 			<button id="search-mode-toggle" onClick={toggleSearchMode}>
 				<Icon icon={searchModeIconMap[searchMode]} className="icon" />
-				{/* <span>{searchMode === 'users' ? 'Groups' : 'Users'}</span> */}
 			</button>
 			<form
 				onSubmit={(event) => {
 					event.preventDefault();
-					searchHandler();
 				}}
 				className="search-bar-container"
 			>
@@ -100,8 +89,11 @@ function Search({ socket }) {
 					placeholder={`Search ${searchMode}...`}
 					value={searchKeyword}
 				/>
-				<button>
-					<Icon icon="fa-solid:search" className="icon" />
+				<button
+					style={{ display: !searchKeyword ? 'none' : '' }}
+					onClick={exitSearchHandler}
+				>
+					<Icon icon="uil:times-square" className="icon" />
 				</button>
 			</form>
 		</div>

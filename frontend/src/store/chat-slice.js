@@ -28,6 +28,10 @@ const chatSlice = createSlice({
 				createdAt: new Date().toDateString(),
 			};
 			const friend = from === state.user.username ? to : from;
+			if (!state.directMessages[friend]) {
+				console.log(`No friend named ${friend}`);
+				state.directMessages[friend] = [];
+			}
 			state.directMessages[friend].push(message);
 			if (
 				state.activeChat &&
@@ -46,6 +50,9 @@ const chatSlice = createSlice({
 				isMilestone,
 				createdAt: new Date().toDateString(),
 			};
+			if (!state.groupMessages[to]) {
+				state.groupMessages[to] = [];
+			}
 			state.groupMessages[to].push(message);
 			if (
 				state.activeChat &&
