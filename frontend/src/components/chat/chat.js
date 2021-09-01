@@ -80,6 +80,11 @@ function Chat() {
 		setSocketConnected(true);
 	});
 
+	socket.on('connect_error', (err) => {
+		localStorage.removeItem('user');
+		window.location.reload();
+	});
+
 	const logoutHandler = () => {
 		fire(appActions.logout());
 		localStorage.removeItem('user');
