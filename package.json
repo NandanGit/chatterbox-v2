@@ -1,0 +1,20 @@
+{
+	"name": "chatterbox",
+	"version": "1.0.0",
+	"description": "RealTime MERN chat application",
+	"main": "./backend/app.js",
+	"scripts": {
+		"start:dev": "cd backend && npm run start:dev",
+		"start": "cd backend && npm start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NandanGit/chatterbox-v2.git"
+	},
+	"author": "Nandan",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/NandanGit/chatterbox-v2/issues"
+	},
+	"homepage": "https://github.com/NandanGit/chatterbox-v2#readme"
+}

@@ -2,9 +2,16 @@ const { server } = require('../serverSetup');
 
 const mongoose = require('mongoose');
 
+const MONGODB_URI =
+	process.env.NODE_ENV !== 'production'
+		? process.env.DEV_MONGODB_URI
+		: process.env.PROD_MONGODB_URI;
+
+console.log(process.env.NODE_ENV);
+
 const db = {
 	connect() {
-		mongoose.connect(`${process.env.MONGODB_URI}/${process.env.DB_NAME}`, {
+		mongoose.connect(`${MONGODB_URI}`, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		});
