@@ -5,11 +5,12 @@ const configureEnvironment = (environment = 'production') => {
 	};
 	variables.HOST_URL =
 		environment === 'production'
-			? 'http://localhost:5000'
+			? 'https://chatterbox-v2-backend.herokuapp.com'
 			: 'http://localhost:5000';
 	return { variables };
 };
 
-const env = configureEnvironment('development');
+const env = configureEnvironment('production');
+console.log(env.variables.HOST_URL);
 
 export default env;
