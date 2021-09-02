@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 // App and server
 const { app, server } = require('./serverSetup');
